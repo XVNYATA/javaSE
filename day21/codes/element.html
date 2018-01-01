@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>element</title>
+        <style>
+            a
+            {
+                cursor: pointer;
+            }
+        </style>
+	</head>
+	
+	<body>
+		<script type="text/javascript">
+            function modifyMyDiv()
+            {
+                var ele = document.getElementById("myDiv");
+                ele.textContent = "文本内容<br/>想换行的！";
+            }
+            function modifyMyDivHTML()
+            {
+                var ele = document.getElementById("myDiv");
+                ele.innerHTML = "文本内容<br/>想换行的！";
+            }
+
+            function substract()
+            {
+                var n = document.getElementById("number").value;
+
+                n = parseInt(n) - 1;
+                if( n <= 0 )
+                {
+                    return;
+                }
+                document.getElementById("number").value = n;
+            }
+
+            function add()
+            {
+                var n = document.getElementById("number").value;
+
+                n = parseInt(n) + 1;
+                
+                document.getElementById("number").value = n;
+            }
+        </script>
+
+        <div id="myDiv">这个是div里面的内容</div>
+        <button onclick="modifyMyDiv()">点击修改div的内容</div><br/>
+
+        <button onclick="modifyMyDivHTML()">点击修改div的HTML内容</button>
+
+        <br/>
+        <a onclick="substract()">-</a>
+        <input id="number" value="0"/>
+        <a onclick="add()">+</a>
+	</body>
+</html>

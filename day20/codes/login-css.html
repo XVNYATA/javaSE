@@ -1,0 +1,202 @@
+<!-- 文档声明，写出下面一句话，表示HTML5 -->
+<!DOCTYPE html>
+<!-- 根元素，最顶层的元素（标签） -->
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>登陆</title>
+		<style type="text/css">
+		.row {
+			margin-left: 0px;
+			margin-right: 0px;
+		}
+		
+		/*
+		    div.center 表示选择class属性里面包含了 center 的div元素
+		*/
+		div.center
+		{
+			/*左右外边距自动*/
+			margin-left: auto !important;
+			margin-right: auto !important;
+
+			/*float表示浮动，none表示没有浮动*/
+			float: none !important;
+			/*display表示显示方式，block表示块级显示，自动换行，div默认就是block方式*/
+			display: block;
+			/*表示div里面的内容，统统居中显示*/
+			text-align: center;
+		}
+		/*
+		@media是CSS 3里面非常重要的一个特点，就是支持响应式布局。能够自动根据屏幕的宽度设置不同的显示样式。
+		min-width当屏幕的宽度大于或等于 992的时候，设置col-md-5的class的宽度为40%。
+		*/
+		@media (min-width: 992px){
+			.col-md-5 {
+				width: 40%;
+			}
+		}
+		/*
+		@media就是“移动设备优先”的根本！
+		*/
+		@media (max-width: 990px){
+			.col-md-5 {
+				width: 80%;
+				background-color: yellow;
+			}
+		}
+		
+		.well {
+			/*最小的高度*/
+			min-height: 20px;
+			/*设置所有的内边距为19像素*/
+			padding: 19px;
+			/*底边的外边距*/
+			margin-bottom: 20px;
+			/*
+			背景颜色，如果是 # 开头的，意味着使用三原色（Red、Green、Blue），每种颜色一个byte，范围是00～ff
+			数字越小，表示颜色越暗，0表示黑
+			*/
+			background-color: #f5f5f5;
+			/*
+			边框、边界
+			边框的宽度是1像素，边框使用实线，颜色为#e3e3e3
+			*/
+			border: 1px solid #e3e3e3;
+			/*
+			边框的圆角的半径为4像素
+			*/
+			border-radius: 4px;
+			/*
+			-  开头的都是用于做浏览器兼容用的！
+			*/
+			-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+			/*
+			边框的阴影
+			inset 表示嵌入
+			0 1px 阴影的位置
+			1px   模糊距离
+			0 阴影尺寸
+			rgba()   是一个函数，表示创建一个具有不透明度的通道的颜色空间
+					Red、Green、Blue，最后的A是指alpha。
+					alpha的值为0~1之间，1表示不透明，0表示透明。
+			*/
+			box-shadow: inset 0 1px 1px 0 rgba(0,0,0,0.05);
+		}
+		/*对 input-group 里面的form-control 设置样式
+			先找到使用 class="input-group" 的元素，再在里面找使用 form-control 的子元素。
+		*/
+		.input-group .form-control
+		{
+			padding: 15px 15px;
+			color:#555555;
+			width: 80%;
+			font-size: 15px;
+			border-top-right-radius: 8px;
+			border-bottom-right-radius: 8px;
+			border:1px solid #cccccc;
+			
+			margin-top: 10px;
+		}
+		
+		/*使用form-control样式的组件，获得焦点以后，修改显示的样式*/
+		.form-control:focus {
+			border-color:#66afe9;
+			outline:0;
+			box-shadow:inset 0 0 8px rgba(102,175,233,0.6)
+		}
+		
+		.input-group-addon
+		{
+			height: 54px;
+			padding: 15px 15px 12px 15px;
+			font-size: 18px;
+			line-height: 1.33;
+			border-radius: 8px;
+			border-bottom-right-radius: 0;
+			border-top-right-radius: 0;
+			color: #555555;
+			text-align: center;
+			background-color: #eeeeee;
+			border: 1px solid #cccccc;
+			font-weight: normal;
+			width: 1%;
+		    white-space: nowrap;
+		    vertical-align: middle;
+		    text-align: center;
+		}
+		/*加载自定义的字体*/
+		@font-face {
+			font-family:'Glyphicons Halflings';
+			/*默认加载的字体文件*/
+			/*如果浏览器不支持，则会使用下一个src*/
+			src:url('./fonts/glyphicons-halflings-regular.eot');
+			
+			/*定义了一系列的字体文件的路径*/
+			/*浏览器会自动尝试每个能用的字体，获取能用的！*/
+			src:url('./fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+				url('./fonts/glyphicons-halflings-regular.woff') format('woff'),
+				url('./fonts/glyphicons-halflings-regular.ttf') format('truetype'),
+				url('./fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg')
+		}
+		.glyphicon
+		{
+			/*位置：使用relative*/
+			position: relative;
+			top: 1px;
+			display: inline-block;
+			/*使用指定的字体*/
+			/*该字体在系统里面是没有的！*/
+			font-family: 'Glyphicons Halflings';
+			font-style: normal;
+			font-weight: normal;
+			line-height: 1;
+		}
+		.glyphicon-user::before
+		{
+			/*在使用.glyphicon-user样式的元素结束之前，追加一个content，内容为  \e008 */
+			/* \e008 其实是在 Glyphicons Halflings 字体里面的一个字符*/
+			content: "\e008";
+		}
+		.glyphicon-lock::before
+		{
+			content: "\e033";
+		}
+		.red
+		{
+			color: #B94846;
+		}
+		</style>
+	</head>
+	
+	<body>
+		<div class="row">
+			<!-- class 属性可以同时指定多个样式，每个样式都是要在style元素里面定义的 -->
+			<div class="well col-md-5 center">
+				<form action="">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="glyphicon glyphicon-user red"></i>
+						</span>
+						<input name="loginName" class="form-control" placeholder="登录名"/>
+					</div>
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="glyphicon glyphicon-lock red"></i>
+						</span>
+						<input name="password" type="password" class="form-control" placeholder="密码"/>
+					</div>
+						<tr>
+							<!-- colspan="2"表示合并两列 -->
+							<!-- style表示样式 -->
+							<!-- text-align: center;表示内容居中显示 -->
+							<td colspan="2" style="text-align: center;">
+								<button type="submit">登陆</button>
+								<button type="reset">重置</button>
+							</td>
+						</tr>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

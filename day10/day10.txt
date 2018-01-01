@@ -1,0 +1,268 @@
+
+System
+    err : 标准错误输出流，通常错误信息使用err进行输出，默认是显示器
+    out : 标准输出流，默认是显示器
+    in  : 标准输入流，默认是键盘
+
+    exit(int status) : 直接退出java虚拟机，相当于是强制关闭虚拟机。
+    gc()             : 垃圾回收，但是调用这个方法的时候，系统不一定会执行垃圾回收。
+        通常在需要大量内存的时候，调用此方法，系统可能会释放一些内容。
+        这个方法的作用通知系统：我要大内存！
+    getenv() : 获取所有的环境变量。
+    getenv(String name) : 根据名字获取环境变量
+    getProperties() : 获取所有的系统属性
+    getProperty(String key) : 根据名字获取系统属性
+    nanoTime() : 获取纳秒时间
+    currentTimeMillis() : 获取毫秒时间
+
+
+
+Runtime
+    System类里面的很多方法其实用调用Runtime里面的方法。
+    Runtime表示运行时，一个java只能有一个Runtime。
+
+    常用方法
+        exec : 用于执行系统本身的命令，很少用。因为使用系统命令会污染Java跨平台特性。
+        gc   : 通知系统进行垃圾回收
+        exit : 退出java命令，通常参数是0，操作系统认为是正常，非0则表示非正常退出。
+
+        freeMemory() : 获取空闲的内存
+        maxMemory()  : Java虚拟机可以使用的最大内存
+        totalMemory(): 已经分配给java虚拟机使用的总内存
+        availableProcessors() : 返回所有可用CPU的数量，比如4的核CPU，返回4。
+
+
+
+Objects类，在java.util包下面
+    String a = null;
+    String b = "abc";
+
+    //肯定空指针
+    if ( a.equals( b) )
+    {
+    }
+
+    //为了避免空指针，通常先判断前面的对象是否为null，再调用equals
+    //有些公司为了避免这种语法，通常写一个工具，封装这种判断
+    if( a != null && a.equals(b) )
+    {
+    }
+
+    //现在可以使用Objects类判断
+    if( Objects.equals( a, b ) )
+    {
+    }
+
+
+String详解
+    String类是用来表示一个字符串的，里面的内部不可变。
+    字符串连接操作，会产生新的String对象，把原来的String覆盖掉，这里并不是修改String的内容。
+
+    String里面常用的方法：
+        length()    : 返回String的内容长度。
+	charAt()    : 返回索引在字符串中的字符。
+        indexOf()   : 查询参数在String对象里面第一次出现的位置，如果没有找到则返回-1。
+        lastIndexOf : 查询参数在String对象里面最后一次出现的位置，如果没有找到则返回-1。
+        substring   : 截取字符串里面的一部分内容，根据索引截取，从0开始。
+        intern      : 判断String的内容是否在字符串池里面，如果不存在则把内容放进去；如果存在则直接返回字符串池里面的String对象。
+        matches     : 使用正则表达式判断String对象的内容是否匹配模式。
+        replace     : 把字符串内容替换掉原来在String对象里面的内容。
+        replaceAll  : 支持正则表达式匹配，替换原来的内容。
+        split       : 根据正则表达式把字符串劈开，返回一个String数组。
+        startsWith  : 判断字符串是否以参数的内容开头。
+        endsWith    : 判断字符串是否以参数的内容结束。
+        toLowerCase : 把字符串内容转换为小写。
+        toUpperCase : 把字符串内容转换为大写。
+        trim        : 把字符串内容里面最开始和最后面的空格、回车之类的不可见字符去掉。中间的不会去掉。
+
+
+StringBuilder和StringBuffer
+    这两个类都是内容可变的字符串，但是前者是线程不安全的，性能高，后者是线程安全的，性能低。
+    两个类的API完全一样。
+
+    如果仅仅是在局部变量里面使用，并且不会当做参数传递给另外的方法，使用StringBuilder。否则建议使用StringBuffer。
+
+    append：追加
+    toString：返回字符串表示形式
+    insert：插入
+    reverse：翻转
+    deleteCharAt：删除
+
+
+课堂练习：
+
+1. 将字符串排序再转成字符串，再打印
+String str = "1,5,2,7,25,698,55,33";
+
+
+随机数
+通过java.Math包的random方法得到1-10的int随机数
+    公式是:最小值---最大值（整数）的随机数
+   （类型）最小值+Math.random()*最大值
+   (int)(1+Math.random()*10)
+
+
+ random的nextInt(int n)方法可以生成一个介于0(包含)到n(不包含)之间的整数
+ rand.nextInt(101);
+
+rand.nextDouble()产生的是[0,1)的小数。
+如果想要产生50--100之间的数字；
+先让它产生[0--50)之间的数字，也就是  rand.nextDouble()*50
+然后在后面加上50,也就是rand.nextDouble())*50+50；
+得到的就是[50--100]的整数了。
+你可以这样写:
+50 - 100
+(int)(rand.nextDouble()*50 +50)
+
+
+ThreadLocalRandom
+    在一个线程内单例的随机数。用法和Random一样。
+    ThreadLocalRandom random = ThreadLocalRandom.current();
+    Random random = ThreadLocalRandom.current();
+
+
+	ThreadLocalRandom tr = ThreadLocalRandom.current();
+	// 0-100
+		int v = tr.nextInt(100);
+	// 10-15
+		int v2 = tr.nextInt(10, 15);
+
+
+Date
+    表示一个时间的快照，通常在创建的时候使用的时间，就是快照的时间。
+
+    构造器
+        Date()  : 创建当前系统时间的快照
+        Date(long ms) : 创建Date的时候，提供了一个毫秒数，这个毫秒数从1970-01-01 0:0:0开始计算，表示时间。
+            Date d = new Date(1); // 1970-1-1 0:0:0.1
+
+    方法
+        getTime()  : 返回Date对象里面保存的毫秒数。
+        setTime(long time) : 修改Date对象里面保存的毫秒数。
+
+
+    CST : China Standard Time 中国标准时间，中国位于世界时区的东八区，而计算机的时间按照GMT表示，毫秒数表示的时间是GMT时间。
+    GMT : Greenwich Mean Time 格林尼治标准时间，0时区，往东正时区，时间需要加；往西时间减。
+
+    因为系统就是设置为CST的，所以new Date的时候传递的毫秒数会自动加上8小时。
+
+    格式化Date
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+Calendar
+    问题：
+        1.今天的是今年的第几天？
+        2.怎么算出两个日期之间的天数？
+
+    获取日历的实例
+        //默认就是当前时间
+        Calendar rightNow = Calendar.getInstance();
+
+    常用方法
+        get  : 根据常量，获取特定的时间部分值，比如DAY_OF_YEAR用于获取当前日历的时间是本年的第几天。
+            int day = rightNow.get(Calendar.DAY_OF_YEAR);
+        set  : 根据常量修改特定的时间部分值，比如SECOND用于设置时间的秒钟数。
+            rightNow.set(Calendar.SECOND, 0);
+        getTime : 返回当前日历里面的Date对象
+
+
+    常量（字段）
+        WEEK_OF_YEAR : 本年里面的第几周
+        YEAR         : 年的部分
+        MONTH        : 月的部分
+        DAY_OF_MONTH : 几号
+        DAY_OF_YEAR  : 本年的第几天
+        DAY_OF_WEEK  : 星期几，默认星期天是第一天
+        HOUR_OF_DAY  : 今天里面的第几个小时，0点是午夜12点
+        MINUTE       : 分钟部分
+        MILLISECOND  : 毫秒部分
+        SECOND       : 秒钟的部分
+        
+
+
+时间格式化
+    负责把String和Date对象之间的转换。
+    DateFormat
+        SimpleDateFormat
+
+    SimpleDateFormat里面主要是利用时间的格式化字符串负责时间和String之间的转换。
+        yyyy年MM月dd日 HH:mm:ss.SSS
+        yyyyMMddHHmmssSSS
+
+        yyyy/MM/dd HH:mm:ss.SSS
+        yyyy-MM-dd HH:mm:ss.SSS
+
+
+
+正则表达式
+    正则表达式是一个强大的字符串处理工具，可以对字符串进行查找、提前、分割、替换等操作。Java提供了Pattern和Matcher两个类专门用于提供正则表达式支持。
+
+    Pattern : 匹配的模式
+    Matcher : 匹配器，用于提取匹配的内容
+
+
+    正则表达式语法
+        字符匹配
+            x	匹配字符x
+            \\	匹配反斜杠
+            \t	制表符
+            \n	换行
+            \r	回车
+        简单逻辑
+            [abc]	a或b、或c
+            [^abc]	对上面一个取反
+            [a-zA-Z]	大写字母或小写字母
+            [a-d[m-p]]	a到d或者m-p
+            [a-z&&[def]]	a到z，并且d或e或f
+            [a-z&&[^bc]]	a到z，但是排除b或c
+            [a-z&&[^m-p]]	a到z，排除m到p
+
+        特殊字符
+            .	任意字符
+            \d	数字，相当于[0-9]
+            \D	非数字
+            \h	水平空格、制表符之类的
+            \H	对上面一个取反
+            \s	空格，包括换行
+            \S	非空格
+            \v	垂直空格，换行
+            \V	不是垂直空格
+            \w	[a-zA-Z_0-9]
+            \W	对上一个取反
+
+        边界匹配
+            ^	一行的开始
+            $	一行的结束，就是匹配到换行符结束
+            \b	文字边界
+            \B	对上面取反
+            \A	从输入的字符串的开始进行匹配
+            \G	在上一个匹配之后
+            \Z	输入的结束
+            \z	输入的结束
+
+        匹配出现的次数
+            X?	X出现0~1次
+            X*	X出现0～N次
+            X+	X出现1～N次
+            X{n}	X确定出现多少次，n是次数（数量）
+            X{n,}	X最少出现多少次
+            X{n,m}	X最少n次，最多m次
+
+        逻辑判断
+            XY	X后面各种Y
+            X|Y	X或者Y
+            (X)	X，但是提取到组里面，后面可以使用Matcher提取出来
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>eval</title>
+	</head>
+	
+	<body>
+		<script type="text/javascript">
+            //要使用一个表达式，来计算5~15的和
+            var str = "";
+            for(var i = 5; i <= 15 ; i++)
+            {
+                str = str + i;
+
+                if( i < 15 )
+                {
+                    str = str + " + ";
+                }
+            }
+
+            console.log( str );
+
+            // 把字符串当做代码来执行！
+            // 类似于在 Java 里面使用 ScriptEngine 的eval方法。
+            var x = eval( str );
+            console.log( x );
+
+            //可以把字符串转换为一个JavaScript对象！
+            str = "x = {name: '张三', age: 15}";
+            eval( str );
+
+            console.log( x );
+            console.log( x.name );//张三
+            console.log( x.age );//15
+        </script>
+	</body>
+</html>

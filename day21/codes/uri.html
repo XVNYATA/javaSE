@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>decodeURI/encodeURI</title>
+	</head>
+	
+	<body>
+		<script type="text/javascript">
+            var s = "<>\"&?=/中文\\";
+            console.log( encodeURI( s ) );
+
+            //编码
+            s = encodeURI( s );
+
+            //输出到页面，可以在浏览器直接看到
+            document.write( s );
+
+            // 输出换行
+            document.write( "<br/>" );
+            //解码
+            document.write( decodeURI( s ) );
+        </script>
+	</body>
+</html>

@@ -1,0 +1,143 @@
+<!-- 文档声明，写出下面一句话，表示HTML5 -->
+<!DOCTYPE html>
+<!-- 根元素，最顶层的元素（标签） -->
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>注册</title>
+        <style type="text/css">
+
+        input {
+            padding: 5px 5px;
+			font-size: 12px;
+			border-radius: 8px;
+			border-radius: 8px;
+            border: solid 1px black;
+        }
+
+        .error {
+			outline:0;
+			box-shadow:inset 0 0 2px rgba(233,00,00,1);
+            border: solid 1px red;
+		}
+        .confirm {
+			outline:0;
+			box-shadow:inset 0 0 2px rgba(0,255,0,1);
+            border: solid 1px green;
+		}
+        </style>
+
+        <script type="text/javascript">
+            var checkPassword = function()
+            {
+                //利用JavaScript的DOM来根据id获取元素，以及元素的值
+                var passwordElement = document.getElementById("password");
+                var password = passwordElement.value;
+
+                var confirmPasswordElement = document.getElementById("confirmPassword");
+                var confirmPassword = confirmPasswordElement.value;
+
+
+                // Java里面比较字符串是否相等，必须使用equals方法
+                // JavaScript不需要，直接用 == ，并且 == 会自动进行类型转换，不同类型的，如果内容相同也能判断为相等。
+                // 为了区分类型，JavaScript提供了 === 运算符，类型不同、内容相同，返回false
+
+/*
+                var x1 = 5;
+                var x2 = "5";
+                var x3 = "5";
+
+
+                // === 相当于是java的==
+                // JavaScript里面 == 相当于 equals
+                console.log( x1 == x2 ); //true
+                console.log( x1 === x2 );//false
+                console.log( x3 === x2 );//true
+
+*/
+                if( confirmPassword !== password )
+                {
+                    //不相等，把元素的class改为error
+                    confirmPasswordElement.className = "error";
+                }
+                else
+                {
+                    //相等，把元素的class改为confirm
+                    confirmPasswordElement.className = "confirm";
+                }
+            };
+        </script>
+	</head>
+	
+	<body>
+		<form action="">
+			<table>
+				<tr>
+					<td>登录名</td>
+					<td><input name="loginName"/></td>
+				</tr>
+				<tr>
+					<td>昵称</td>
+					<td><input name="nickName"/></td>
+				</tr>
+				<tr>
+					<td>密码</td>
+					<td>
+						<!-- type="password" 表示密码框，前面两个没有type默认text -->
+					   	<input name="password" type="password" id="password"/>
+					</td>
+				</tr>
+				<tr>
+					<td>确认密码</td>
+                    <!-- id的值在一个html里面是不可重复的，否则不会报错，但是出来的结果和你想的不同！ -->
+					<td><input name="confirmPassword" type="password" id="confirmPassword" onkeyup="checkPassword()"/></td>
+				</tr>
+				<tr>
+					<td>性别</td>
+					<td>
+						<!-- value的值，用于提交给服务器，不会显示在浏览器 -->
+						<!-- 浏览器会判断所有name相同的radio，确保这些radio只能选择一个 -->
+						<label>男<input type="radio" name="gender" value="男"/></label>
+						<label>女<input type="radio" name="gender" value="女"/></label>
+					</td>
+				</tr>
+				<tr>
+					<td>年龄</td>
+					<td><input type="number" name="age"/></td>
+				</tr>
+				<tr>
+					<td>爱好</td>
+					<td>
+						<label>登山<input type="checkbox" value="登山"/></label>
+						<label>游泳<input type="checkbox" value="游泳"/></label>
+						<label>滑翔<input type="checkbox" value="滑翔"/></label>
+						<br/>
+						<label>跑步<input type="checkbox" value="跑步"/></label>
+						<label>开飞机<input type="checkbox" value="开飞机"/></label>
+					</td>
+				</tr>
+				<tr>
+					<td>最高学历</td>
+					<td>
+						<select name="schoolRecord">
+							<option>小学</option>
+							<option>中学</option>
+							<option>专科</option>
+							<option>本科</option>
+							<option>无</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<!-- colspan="2"表示合并两列 -->
+					<!-- style表示样式 -->
+					<!-- text-align: center;表示内容居中显示 -->
+					<td colspan="2" style="text-align: center;">
+						<button type="submit">注册</button>
+						<button type="reset">重置</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</body>
+</html>

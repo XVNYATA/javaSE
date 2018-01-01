@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>疯狂飞机大战</title>
+        <style type="text/css">
+            #mainContainer
+            {
+                width: 800px;
+                height: 600px;
+                margin-left: auto;
+                margin-right: auto;
+
+                border-radius: 8px;
+                border: solid 1px black;
+            }
+
+            #sky
+            {
+                width: 600px;
+                height: 100%;
+
+                background-color: #3399FF;
+                float: left;
+                border-top-left-radius: 8px;
+                border-bottom-left-radius: 8px;
+            }
+
+
+            #info
+            {
+                width: 200px;
+                height: 100%;
+                float: right;
+
+                background-color: #e5e5e5;
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+            }
+
+            .bullet
+            {
+                background-color: red;
+                width: 10px;
+                height: 10px;
+
+                position: absolute;
+
+                border-radius: 10px;
+            }
+
+        </style>
+        <script type="text/javascript">
+
+            //用来存储子弹的集合
+            var bullets = new Array();
+            //用来存储敌机的集合
+            var enemyList = new Array();
+
+            function shipFllowMouse()
+            {
+                //获取鼠标的坐标
+                var x = event.clientX;
+                var y = event.clientY;
+
+                x = x - 30;
+                y = y - 60;
+
+                changeShipLocation( x, y );
+            }
+
+            function moveShip()
+            {
+                //获取按键，检查是否需要移动的按键，如果是则移动飞机
+                var keyCode = event.keyCode;
+                //console.log( " 按键 : " + keyCode );
+
+                var ship = document.getElementById("ship");
+                var x = ship.offsetLeft;
+                var y = ship.offsetTop;
+
+                if( keyCode == 37 || keyCode == 65 )
+                {
+                    //向左
+                    x = x - 10;
+                }
+                else if( keyCode == 40 || keyCode == 83 )
+                {
+                    //向下
+                    y = y + 10;
+                }
+                else if( keyCode == 38 || keyCode == 87 )
+                {
+                    //向上
+                    y = y - 10;
+                }
+                else if( keyCode == 39 || keyCode == 68 )
+                {
+                    //向右
+                    x = x + 10;
+                }
+
+                changeShipLocation( x, y );
+
+            }
+
+            function changeShipLocation( x, y )
+            {
+
+                //y必须减去飞机的高度
+                //y = y - 60;
+                if ( y <= 60 )
+                {
+                    y = 60;
+                }
+
+                //必须获取天空的x轴，和天空的宽度算出最大的x轴
+                var sky = document.getElementById("sky");
+
+                // 天空的宽度
+                var skyWidth = sky.clientWidth;
+                var skyX = sky.offsetLeft;
+                var skyY = sky.offsetTop;
+                var skyHeight = sky.clientHeight;
+
+                if( y > skyY + skyHeight - 60 )
+                {
+                    y = skyY + skyHeight - 60;
+                }
+
+                //console.log( "宽度: "+ skyWidth );
+                //console.log( "X轴: "+skyX );
+
+                //console.log( "x: " + x );
+
+                //x = x - 30;
+
+                if( x < skyX )
+                {
+                    x = skyX;
+                }
+
+                if( x > skyX + skyWidth - 60 )
+                {
+                    x = skyX + skyWidth - 60;
+                }
+
+                
+                ship.style.top = y+"px";
+                ship.style.left = x + "px";
+            }
+
+
+            function fire()
+            {
+                //获取飞机的位置，x轴需要加上30
+                var ship = document.getElementById("ship");
+
+                var x = ship.offsetLeft;
+                var y = ship.offsetTop;
+
+                x = x + 30 - 5;
+                y = y - 10;
+
+                //动态创建一个子弹，红色
+                var bullet = document.createElement("div");
+                bullet.className = "bullet";
+
+                //把子弹添加到天空的指定位置
+                bullet.style.top = y+"px";
+                bullet.style.left = x + "px";
+
+                var sky = document.getElementById("sky");
+                sky.appendChild( bullet );
+
+                //子弹需要加入到集合中
+                bullets.push( bullet );
+            }
+
+
+            //启动线程，不断修改子弹的位置。
+            //在时间到达以后，执行auto方法。只要传入方法名即可。
+            setInterval( auto, 40 );
+
+
+            function auto()
+            {
+                //修改子弹的位置
+                modifyBullets();
+
+                //生成敌机
+                //生成0~20之间的随机数，如果数字等于10的时候，产生一架飞机
+                var r = Math.random() * 1000 % 20;
+                r = Math.round( r );
+                if( r == 10 )
+                {
+                    generateEnemy();
+                }
+
+                //修改敌机的位置
+                modifyEnemyList();
+
+                //碰撞检测
+                checkHit();
+            }
+
+            function modifyBullets()
+            {
+                var newBullets = new Array();
+                for( var i = 0; i < bullets.length; i++ )
+                {
+                    //根据索引从集合里面获取子弹
+                    var bullet = bullets[i];
+
+                    //获取子弹的y轴
+                    var y = bullet.offsetTop;
+                    y = y - 10;
+
+                    //需要判断子弹是否超过天际，如果是则需要从集合里面、html里面删除
+                    //不删除的，保留到新的集合里面，循环完以后，把集合替换掉。
+                    var sky = document.getElementById("sky");
+                    var skyY = sky.offsetTop;
+                    if( y > skyY )
+                    {
+                        //没有超出天际
+                        newBullets.push( bullet );//还需要的子弹放入集合中
+                    }
+                    else
+                    {
+                        //从天空里面把子弹删除
+                        sky.removeChild( bullet );
+                    }
+
+                    bullet.style.top = y + "px";
+                }
+
+                bullets = newBullets;
+            }
+
+            function generateEnemy()
+            {
+                var enemy = document.createElement("img");
+                enemy.src = "enemy.png";
+                enemy.style.position = "absolute";
+
+                //设置坐标，y轴当然是0，x轴需要随机
+                var x = Math.random() * 1000;
+                x = Math.round(x % 600);//得到0~600之间的整数
+                x = x + 50;
+
+                //console.log( "随机坐标: " + x );
+                var sky = document.getElementById("sky");
+
+                // 天空的宽度
+                var skyWidth = sky.clientWidth;
+                var skyX = sky.offsetLeft;
+
+                if( x < skyX )
+                {
+                    x = skyX;
+                }
+
+                else if ( x > skyWidth + skyX - 60 )
+                {
+                    x = skyWidth + skyX - 60;
+                }
+
+                //把敌机添加到天空里面的指定位置
+                
+                enemy.style.top = "0px";
+                enemy.style.left = x + "px";
+
+                sky.appendChild( enemy );
+
+                //敌机也需要加入到集合，以便不断修改位置
+                enemyList.push( enemy );
+            }
+
+            function modifyEnemyList()
+            {
+                var newEnemyList = new Array();
+                for( var i = 0; i < enemyList.length; i++ )
+                {
+                    //根据索引从集合里面获取子弹
+                    var enemy = enemyList[i];
+
+                    //获取子弹的y轴
+                    var y = enemy.offsetTop;
+                    y = y + 10;
+
+
+                    var sky = document.getElementById("sky");
+                    var skyY = sky.offsetTop;
+                    var skyHeight = sky.clientHeight;
+                    if( y < skyY + skyHeight - 60 )
+                    {
+                        //没有超出天际
+                        newEnemyList.push( enemy );
+                    }
+                    else
+                    {
+                        //从天空里面把敌机删除
+                        sky.removeChild( enemy );
+                    }
+
+                    enemy.style.top = y + "px";
+                }
+
+                enemyList = newEnemyList;
+            }
+
+            //碰撞检测：检查子弹是否在敌机的范围，如果在则认为敌机被击中。击中以后马上摧毁敌机和子弹。
+            function checkHit()
+            {
+                var sky = document.getElementById("sky");
+                var count = document.getElementById("count").textContent;
+                count = parseInt( count );
+
+                var newEnemyList = new Array();
+                //使用两层的嵌套循环来进行检测
+                //外层循环所有的敌机
+                for( var i = 0; i < enemyList.length; i++ )
+                {
+                    var enemy = enemyList[i];
+
+                    var enemyX = enemy.offsetLeft;
+                    var enemyY = enemy.offsetTop;
+                    var enemyWidth = enemy.clientWidth;
+                    var enemyHeight = enemy.clientHeight;
+
+                    var destoryed = false;
+                    var newBullets = new Array();
+
+                    //内层循环所有的子弹，判断子弹的位置是否在敌机的范围
+                    for( var j = 0; j < bullets.length; j++ )
+                    {
+                        var bullet = bullets[j];
+
+                        var bulletX = bullet.offsetLeft;
+                        var bulletY = bullet.offsetTop;
+
+                        if( bulletX >= enemyX && bulletX <= enemyX + enemyWidth
+                            && bulletY >= enemyY && bulletY <= enemyY + enemyHeight )
+                        {
+                            //销毁
+                            destoryed = true;
+                            //摧毁子弹
+                            sky.removeChild( bullet );
+
+                            count ++;
+                        }
+                        else
+                        {
+                            newBullets.push(bullet);
+                        }
+                    }
+                    //这句话这里避免已经销毁的子弹，再销毁一次！
+                    bullets = newBullets;
+
+                    //循环外面再判断是否摧毁，如果已经摧毁，则销毁敌机
+                    if( destoryed )
+                    {
+                        sky.removeChild( enemy );
+                    }
+                    else
+                    {
+                        newEnemyList.push( enemy );
+                    }
+                }
+
+                enemyList = newEnemyList;
+                document.getElementById("count").textContent = count;
+            }
+        </script>
+	</head>
+	
+	<body onkeydown="moveShip(); if( event.keyCode == 74 ) { fire(); }">
+		<script type="text/javascript">
+            
+        </script>
+
+        <!--使用一个容器，里面放天空和信息面板-->
+        <div id="mainContainer">
+            <div id="sky" onmousemove="shipFllowMouse()" onclick="fire();" >
+                <!-- 友机，需要跟随鼠标移动，鼠标的位置在哪里，飞机就在哪里！ -->
+                <img src="ship.png" id="ship" style="position: absolute"/>
+            </div>
+
+            <div id="info">
+                击毁的敌机数量: <span id="count">0</span>
+            </div>
+        </div>
+	</body>
+</html>

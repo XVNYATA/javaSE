@@ -1,0 +1,8 @@
+ 一，eclipse工作集的使用
+     
+     a.点击 “File” ---> “NEW” --->输入--->"java working set"
+       ---->输入你的工作集名称 确定即可 
+
+     b.点击-->"倒三角" --点击 Top level Elements ---> Woking set
+     
+     c.点击-->"倒三角" --点击 Selecting working sets 选中你需要展示的工作集

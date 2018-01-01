@@ -1,0 +1,136 @@
+IO :
+   输入流 
+   输出流：
+
+   字节流：
+   字符流：
+
+   节点流：
+   包装流：
+   
+字符流的复制：
+     字符流的复制：必须输入流传输过来的字符不乱码即可！
+     字节流的复制：必须前后文件的编码一致才可以
+
+     文本文件的复制采用字符流复制更好
+     二进制文件(图片视频)必须采用字节流复制
+
+
+IO流在java代码中的操作：
+	         字节流                                                    字符流  
+   InputStream(字节输入流)   OutputStream(字节输出流)   Reader(字符输入流)    Writer(字符输出流)  
+   FileInputStream            FileOutputStream           FileReader            FileWriter
+   -----------------------------------------------------------------------------------------------------------
+   ByteArrayInputStream       ByteArrayOutputStream      CharArrayReader       CharArrayWriter       读写数组         PipedInputStream         PipedOutputStream            PipedReader            PipedWriter        读写管道                                                               StringReader          StringWriter        读写String         上面4行都是节点流，且读写数组的、读写字符串的节点流，其实并不常用！
+   FilterInputStream          FilterOutputStream         FilterReader          FilterWriter          过滤流基类
+   BufferedInputStream        BufferedOutputStream       BufferedReader        BufferedWriter        缓冲流 
+                              PrintStream                                      PrintWriter          打印流
+                                                         InputStreamReader     OutputStreamWriter    转换流
+    DataInputStream        DataOutputStream                                                          特殊流
+    ObjectInputStream      ObjectOutputStream   
+    
+
+缓冲流：  
+
+    BufferedInputStream   字节输入缓冲流
+    BufferedOutputStream  字节输出缓冲流
+
+    为什么要引入缓冲流：
+
+        打印机操作： 内存+io   内存读写文件的速度是很快的，但是io输出比较慢 
+	              cpu读写就必须等待io输出完成才可以，实际上io操作就阻塞了cpu性能
+
+        引入缓冲池： 内存输入： 直接输入到内存中的一块缓冲区域(这个速度快)
+	             同时io输出就到缓冲池中慢慢的读取即可。
+		     这是一种典型的牺牲内存区域获取性能的设计！
+
+    BufferedReader 缓冲字符输入流：
+                 多了一个readLine();可以一行一行的读取文本文件内容
+		 所以：读取文本文件内容建议使用BufferedReader
+
+
+★ 打印流
+
+      打印流只能是输出流。
+
+      PrintStream和PrintWriter的优势在于，输出时使用print和println方法特别方便。
+
+      【典型用法：】  如果输出文本数据，推荐使用PrintStream或PrintWriter来输出。
+
+
+★ 特殊的数据处理流
+
+       DataInputStream、DataOutputStream：
+          1.可以输出特定数据类型的数据，boolean , int , double 类型的数据到文件保存
+	  2.可以输入特定数据的类型数据，可以解析之前存的数据是什么类型。
+
+       DataInputStream、DataOutputStream —— 可以为读、写各种特定数据类型提供了对应的方法。
+
+       它会以一种特殊的格式来记录数据，因此DataOutputStream 输出的文件， 通常要用DataInputStream来读取。
+
+       使用DataOutputStream 、DataInputStream读、写数据的顺序而且读取的类型方法也必须是一致的。
+
+       【注意】：不要把DataOutputStream的数据文件当成所谓的加密文件。
+
+★ 重定向标准输入输出：
+
+      System.out：标准输出设备，原本是屏幕。
+             setOut(PrintStream out), 将标准输出重定向指定输出流。
+
+      System.in：标准输入设备，原本是键盘。
+             setIn(InputStream in), 将标准输入重定向指定输入流。
+
+	     --- 键盘输入实际上就是一个输入流 
+
+★ 读取其他进程的IO流
+
+      进程：程序是又很多进程组成的。(qq视频：播放声音(进程) , 播放画面(进程))
+     
+
+      Java的Process代表了进程。
+
+      Process提供了如下方法来获取该进程的输入、输出流：
+       - getOutputStream()：获取输出流可以把数据输出给Process。
+       - getInputStream()：获取输入流用于读取Process的正常的输出数据。
+       - getErrorStream()：获取输入流用于读取Process的出错时的输出数据。
+
+      注意: 进程执行过程的信息就是流的形式。
+
+★ RandomAccessFile：
+
+      计算机中有一块内存区域：
+         内存
+	 ROM ： 只读 ，写死的一般记录硬件信息
+	 RAM ： 读写 ，是速度十分快的一块存储区域
+
+      RAM：随机（Random）访问存储器。
+         
+      有一类存储设备：比如磁盘，需要先“寻道”，然后才能读取数据，
+                       比如磁带，需要先“倒带”，然后才能读取数据。
+      还有另一类存储设备：比如内存，无需寻道，想读哪个数据点，就读哪个数据点，非常快，任意读取指定数据点。
+                          这就是RAM（内存）
+                     
+           
+      Random：任意的。RandomAccessFile可以读取读取文件的指定位置（想读哪里，就读哪里）。
+                seek(long pos)，将文件的读写位置定位到指定位置。
+
+      File：io流使用file类只能读、写文件。
+
+      RandomAccessFile(RAM)与普通OutputStream(内存)不同：  
+
+          1.由于只要创建OutputStream，就会得到一根空水管， 因此如果被创建文件原本有内容，原有内容全部被清空。
+          
+	  2.RandomAccessFile不会清空原有的文件内容。 好处在哪里？
+
+      RandomAccessFile的读写方法，相当于DataInputStream 、DataOutputStream的合体。
+
+      创建RandomAccessFile时，第二个参数的意义：
+         "r" ： 代表只读。  read
+         "rw"： 代表读写。  read writer
+         "rws"：代表读写。最严格：对文件内容或元数据修改总会同步写入底层存储设备。
+         "rwd"：代表读写。次严格：对文件内容修改总会同步写入底层存储设备。
+
+      RandomAccessFile即可用于读文件内容（想读哪里，就读哪里）
+      RandomAccessFile即可用于写文件内容（想写哪里，就写哪里） 
+     
+      —— 它可用于实现多线程、断点下载工具。   

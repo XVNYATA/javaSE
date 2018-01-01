@@ -1,0 +1,47 @@
+NIO
+    ServerSocketChannel : 服务端的、用于绑定端口的一个Socket通道。类似于ServerSocket。
+    SocketChannel       : 客户端和服务端连接成功以后，会产生的一个端对端的通道。类似于Socket。
+    Selector            : NIO是基于事件的方式来驱动业务的，哪些事件要处理呢？在通道里面注册选择以后，利用Selector可以选取需要处理的事件。
+    SelectionKey        : 相当于就是选择的事件的名称。
+
+
+    使用NIO开发HTTP服务器步骤
+        1.打开ServerSocketChannel
+            ServerSocketChannel serverChannel = ServerSocketChannel.open();
+
+        2.设置Socket的参数
+            默认情况下可以不设置，参数只是为了优化性能。
+
+            setOption是设置性能优化选项的方法，可以省略。
+
+
+            为了实现选择的能力，必须要配置一个参数：
+
+            //表示配置非阻塞IO，NIO最直接的性能提升，就是非阻塞IO。
+            //如果没有配置这个参数，那么后面的选择器无法正常选择。
+            serverChannel.configureBlocking( false );
+
+        3.绑定端口
+            InetSocketAddress port = new InetSocketAddress(8000);
+            serverChannel.bind( port );
+
+
+        4.注册选择事件
+            //打开一个选择器
+            Selector selector = Selector.open();
+
+            //注册连接操作，如果有连接操作，则进行处理
+            serverChannel.register( selector, SelectionKey.OP_ACCEPT );
+
+
+            //选择注册完成以后，就可以接受浏览器的连接，往往需要启动一个线程不断select，选择事件来进行处理
+
+
+
+
+
+
+
+
+
+

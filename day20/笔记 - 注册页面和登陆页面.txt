@@ -1,0 +1,158 @@
+图形界面三个基本元素：
+    组件
+    布局
+    事件
+
+
+HTML 5
+    组件
+
+    HTML是超文本标记语言的缩写，所有的组件都是使用标记的方式来添加，本质上就是一个文本、字符串。
+
+
+    自结束的标签
+        <input />
+
+    把开始、结束标签分开的
+        <input></input>
+
+    语法不严格
+        <input>
+
+
+    HTML 5并不是什么高级技术，而是一种妥协，其实只是在HTML 4的基础上增加了几个标签（标记）而已。
+    HTML 4里面的标签，还是目前浏览器开发的主流标签。HTML 5的标签在很多不同的浏览器，体现的效果是不同的，所以兼容性差。
+
+    HTML 就是一个文本、字符串，直接写到文件里面，并且命名为htm或者html为扩展名的文件，就可以直接使用浏览器打开。
+    浏览器会自动根据标签绘图。
+
+
+    常用标签
+        div           默认会自动换行的容器，相当于是JPanel。
+        span          默认不会换行的容器，相当于是JPanel。
+        input         输入框
+            <input type=""/>
+
+            type是属性，属性必须有值，引号里面就是值：
+                text  : 相当于就是JTextField
+                radio : 单选框
+                checkbox : 复选框
+                password : 密码框
+                file     : 文件选择按钮
+                button   : 按钮
+                submit   : 提交按钮
+                reset    : 重置按钮
+
+        a     超级链接，可以点击进入的！
+            <a href="http://www.baidu.com">百度</a>
+
+        button          专门的按钮标签。后来的HTML版本不推荐使用input来作为按钮。而是推荐使用button标签。
+            <button type="reset">按钮上的文字</button>
+            type为按钮的类型
+                button   : 按钮
+                submit   : 提交按钮
+                reset    : 重置按钮
+
+        <h1>
+        <h2>
+        ...
+        <h6>
+            标题
+
+            <h2>二号字体的标题</h2>
+
+        textarea   多行文本区域，相当于JTextArea
+        img        自动会读取图片文件，显示在浏览器
+        font       字体
+        br          换行
+            <br/>
+            <br>
+
+        form        表单，要提交到服务器的数据，必须放在form标签里面。
+            <form action="/login">
+                用户名<input name="userName"/><br/>
+                密码  <input type="password" name="pass"/><br/>
+                <button type="submit">登陆</button>
+            </form>
+
+
+            点击“登陆”按钮的时候，会把userName和pass的值，提交到服务器的 /login 里面。
+
+        table       表格
+            tr      一行
+                td  一个格子
+
+        <table>
+            <tr>
+                <td>格子里面的内容</td>
+                <td>另外一个格子</td>
+            </tr>
+            <tr>
+                <td>另外一行的格子内容</td>
+            </tr>
+        </table>
+
+
+    HTML 4 和 HTML 5 在第一行的区别：
+
+        HTML 4
+            <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+        HTML 5
+            <!DOCTYPE html>
+
+
+    规则：
+        一个HTML文件，只能有一个html标签，并且放在最外面！
+        在html标签里面，可以有head、body等标签。
+        head表示头，通常包括字符编码、标题、外部的css、js文件、图标文件、搜索引擎使用的关键词、作者、版权等声明性的、不可见的信息。
+
+        body表示主体，所有的组件都应该放在body里面。
+
+
+
+
+
+
+CSS 3
+    布局
+
+
+
+
+
+
+
+
+
+
+
+HTML的练习
+    使用HTML开发简单的用户注册和登陆界面。
+    注册
+        需要输入登录名、昵称、单选性别、数字年龄、多选爱好、两次密码、单选最高学历
+        需要有提交按钮和重置按钮
+
+
+    登陆
+        需要输入登录名、密码
+        登陆按钮
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

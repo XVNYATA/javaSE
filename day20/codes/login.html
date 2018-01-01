@@ -1,0 +1,36 @@
+<!-- 文档声明，写出下面一句话，表示HTML5 -->
+<!DOCTYPE html>
+<!-- 根元素，最顶层的元素（标签） -->
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>登陆</title>
+	</head>
+	
+	<body>
+		<form action="">
+			<table>
+				<tr>
+					<td>登录名</td>
+					<td><input name="loginName"/></td>
+				</tr>
+				<tr>
+					<td>密码</td>
+					<td>
+						<!-- type="password" 表示密码框，前面两个没有type默认text -->
+					   	<input name="password" type="password"/>
+					</td>
+				</tr>
+				<tr>
+					<!-- colspan="2"表示合并两列 -->
+					<!-- style表示样式 -->
+					<!-- text-align: center;表示内容居中显示 -->
+					<td colspan="2" style="text-align: center;">
+						<button type="submit">登陆</button>
+						<button type="reset">重置</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</body>
+</html>

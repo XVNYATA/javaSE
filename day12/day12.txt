@@ -1,0 +1,405 @@
+集合
+
+1. 为什么要学集合？
+集合是用来存储数据的，很方便，功能很强大。
+（1）变量 String name = "jack";
+（2） 数组 String[] names = {"","",""}
+（3） 对象 User  { private String name; private String sex}
+      对象数组  User[] users {new User{"",""},new User{"",""}}
+
+数组缺陷：
+1. 固定长度 String [] names = new String[10];很多时候，在开发中使用数据的时候
+是不知道有多少数据的。
+2. 数组只能存储单一类型的数据。Object[] objs = new Object[10];
+
+集合的特点：
+（1）没有长度限制，可以自动扩展。10 * 2 * 2
+（2）集合可以存储任何类型的对象。对象Integer  基本数据类型int
+（3）Java5之后还引入了泛型机制，集合可以存储相关类型的对象。
+
+
+Java的集合分为两大类： 
+1。 单值集合 集合{"java","oracle"}
+2.  键值对集合   集合{key=value,1=new User("",""),2=new User("","")}
+
+-------------------------------------------------------------
+
+1. 单值集合
+Collection接口：
+	Collection 层次结构 中的根接口。Collection 表示一组对象，这些对象也称为 collection 的元素。
+   -- List 接口
+	（1）有序的 collection（也称为序列）。此接口的用户可以对列表中每个元素的插入位置进行精确地控制。用户可以根据元素的整数索引（在列表中的位置）访问元素，并搜索列表中的元素。
+        （2）与 set 不同，列表通常允许重复的元素。
+	（3）允许null值。
+
+      --  ArrayList 类
+	List 接口的大小可变数组的实现。实现了所有可选列表操作，并允许包括 null 在内的所有元素。除了实现 List 接口外，此类还提供一些方法来操作内部用来存储列表的数组的大小。（此类大致上等同于 Vector 类，除了此类是不同步的。线程不安全）
+	性能高，适用于快速读取数据。
+	重点方法：
+	add(E e)
+	get(int index)
+	size()
+	iterator()
+
+      --  Vector  类
+         （此类大致上等同于 ArrayList 类，此类是同步的，线程安全）
+
+      --  LinedList 类
+	List 接口的链接列表实现。实现所有可选的列表操作，并且允许所有元素（包括 null）。除了实现 List 接口外，LinkedList 类还为在列表的开头及结尾 get、remove 和 insert 元素提供了统一的命名方法。这些操作允许将链接列表用作堆栈、队列或双端队列。
+
+	getFirst() 、getLast() 
+	peek()、peekFirst()、peekLast() 
+	poll() 、pollFirst()、pollLast() 
+	removeFirst() 、removeLast() 
+
+
+      ArrayList和Vector的区别：
+	    （1）ArrayList不是线程安全的，Vector是线程安全的。
+	    （2）新的版本推荐Collections.synchronizedList(list)将ArrayList转成线程安全的。
+      
+      注意：线程安全（同步）和线程不安全（不同步），之后线程的时候在重点讲解。
+
+     ArrayList和LinedList的区别：
+	    （1）ArrayList是数组的实现，LinkedList是链表的实现。
+	    （2）ArrayList提取查询数据性能很高，但是添加、删除数据性能不好。
+		 LinkedList提取查询数据性能很低，但是添加、删除数据性能很高。
+	    （3）实际开发中，如果使用的集合注意是用来查询数据，建议使用ArrayList。如果更多会做添加、删除的操作，建议使用LinkedList。
+
+  
+  泛型机制：
+     Java 1.5之后加入了泛型机制。
+     引入泛型机制的原因：
+      （1）集合可以存储任何类型的对象 add(Object o)。
+           因为存入的就是Object，所以取出来也是Object，如果要取出实际的类型，需要强制类型转换。否则会抛出java.lang.ClassCastException。
+
+	   但是实际开发中，集合多数都是存储一类相同的数据。
+
+     解决方案：泛型机制
+
+     <E>: List<String>称为 List type of String
+     源代码：public interface List<E> extends Collection<E> {
+     List<E>是泛型接口定义，<>是语法，E是形参（可以理解成Object，写的时候可以是A-Z的任意大写字母,常见的是T[Type],E(Element)），实际声明引用变量的时候要使用实参。
+     List<String> list = new ArrayList<String>();
+     以上代码的意思是，定义了一个List集合，该集合只能存储String类型的数据。
+
+     泛型的实质：
+	泛型只是在集合上面添加了一个"标签"，作用是告诉编译器，该集合只能存储某种类型的数据，如果传入的数据类型错误，则编译不通过。
+	实际底层并没有发生变化。集合还是可以存储任何类型的数据。！！！
+
+   -- Set  接口
+      （1） 一个不包含重复元素的 collection。
+      （2）并且最多包含一个 null 元素
+      （3） 无序集合
+      （4） 建议自定义对象一定要覆盖hashcode()和equals()方法
+
+      Set不包含重复数据，Set集合判断重复数据的条件：
+      （1）hashcode相等。
+      （2）equals返回true。
+
+      -- HashSet
+	 最常用的Set实现类，底层是哈希码（散列）。
+	 性能很高，几乎可以比得上数组。但是如果存储数据的发生"链表"的情况，则性能会受到影响。
+
+	 HashSet存入的机制：
+     （1）当添加元素时，HashSet会调用该对象的hashCode()方法，得到一个int值。
+     （2）根据hashCode()返回的int值，计算出它在【底层】的存储位置。
+     （3）如果要加入的位置是空的，直接放入即可。
+     （4）如果要加入的位置已经有元素，此处就会形成“链表”。
+
+
+     HashSet取元素的机制：
+     （1）当要取一个元素时，HashSet会调用该对象的hashCode()方法，得到一个int值。
+     （2）根据hashCode()返回的int值，计算出它在【底层】的存储位置。
+     （3）如果该位置恰好是要找到元素，直接取出即可。
+     （4）如果该位置有链表， HashSet要“挨个”搜索链表里的元素。
+
+
+	Set和List的区别：
+	（1） List有序（数组），Set无序（哈希码）
+	（2） List底层是数组，Set底层是哈希表
+	（3） Set存储的对象需要实现hashcode()和equals()方法
+	 
+
+      -- LinkedHashSet
+
+	 Set 接口的哈希表和链接列表实现。
+	 此实现与 HashSet 的不同之外在于，维护着一个运行于所有条目的双重链接列表。此链接列表定义了迭代顺序，也就是说按照将元素插入到 set 中的顺序（插入顺序）进行迭代。
+
+	 其他使用和HashSet一样。
+
+	 LinkedHashSet的读数据会稍微比HashSet快一点。
+	 HashSet的写数据会比LinkedHashSet稍微快一点。
+
+
+      -- TreeSet
+
+         TreeSet是一个可以排序的Set集合。
+	 使用元素的自然顺序对元素进行排序。
+	 重点：
+	 （1）存储自定义对象需要TreeSet在构造器中使用Comparator比较器进行排序。
+	 （2）自定义对象实现Comparable接口进行排序
+	 （3）如果TreeSet在构造器中使用了Comparator比较器排序，而自定义对象同时也实现了Comparable接口进行排序，以构造器的Comparator比较器的排序规则为准。
+
+
+   -- Queue 接口  简单了解
+	先进先出
+
+            主要操作
+                poll：从头部获取一个元素，并且把该元素从队列中删除
+                peek：从头部获取一个元素，但是不把该元素从队列中删除
+                add：添加一个元素到队列的尾部
+                remove：从头部获取一个元素，并且把该元素从队列中删除，如果队列为空抛出异常
+            主要的队列实现
+
+      -- PriorityQueue：一个基于优先级堆的无界优先级队列。优先级队列的元素按照其自然顺序进行排序，或者根据构造队列时提供的 Comparator 进行排序。
+
+      -- ArrayDeque：Deque 接口的大小可变数组的实现。数组双端队列，允许从两端来操作队列的元素。
+		addFirst()
+		addLast()
+		getFirst()
+		getLast()
+		peekFirst() 
+		peekLast() 
+		pollFirst() 
+		pollLast() 
+		removeFirst()
+		removeLast()
+
+
+ 
+ public interface 动物{
+	吃();
+ }
+
+ public interface 地上的动物 extends 动物{
+	跑();
+ }
+
+  public interface 天上的动物 extends 动物{
+	飞();
+ }
+
+ public class 老虎 implements 地上的动物{
+	吃();
+	跑();
+ }
+
+ public class 鹰 implements 天上的动物{
+	吃();
+	飞();
+ }
+
+为什么SUN公司设计的时候分Collection接口、List接口、Set接口？
+因为List接口和Set接口的实现不一样，Set是没有下标的，而List底层是数组，是有下标的。Liet可以通过索引去获取数据，如果该方法定义在Collection接口中，那么Set如何去实现该功能。
+
+--------------------------------------------------
+ 真实项目设计接口：
+ 读取数据库表的方法
+
+ tb_user 用户表  id、username、sex、loginname、password
+ tb_book 书籍表  id、title、author、price
+
+ public interface 上层接口{
+	添加(Object o);
+	删除(Intger id);
+	修改(Object o);
+	-- 下面功能应该定义到子接口
+	根据登录名和密码登录(String loginname,String password);
+	根据作者查询书(String author)
+ }
+--------------------------------------------------
+
+
+作业：
+/**
+模拟游戏发扑克：
+
+随机获取52张扑克牌,无大小王
+只保持1-52,不允许重复
+并发到4个人手中（用四个集合代替）
+
+List实现一次，Set实现一次
+
+*/
+
+
+/**
+ * 思路：
+ * 1.定义一个保存整数的集合，随机获取1-52，保存到集合当中
+ * 2. 循环遍历整数集合，依次分配到4个集合当中
+ * */
+
+
+总结：
+List集合当中，最常用的是Set接口和List接口。
+
+如果存储数据需要不重复，使用Set。
+ -- 如果要求查询性能，使用HashSet。
+ -- 如果需要排序，使用TreeSet。
+
+如果存储数据允许重复，使用List。
+ -- 如果要求查询性能，使用ArrayList。
+ -- 如果经常添加、删除，使用LinkedList。
+
+
+
+2.  键值对集合
+
+Map{key = value}
+
+   语文：90
+   数学：99
+
+层次：
+Map接口  
+    特点：
+    （1） key不允许重复，一个key对应一个value
+    （2）如果key是自定义对象，一定要覆盖hashcode和equals方法
+
+    重点方法：
+     put(K key, V value)：保存一个映射（key，value）
+     get(Object key) ：通过key查找值
+     remove(Object key) ：通过key删除映射
+
+     Map<Set,Collection>,key是用一个Set集合保存，value是用一个Collection保存
+
+     keySet()：返回所有key的Set集合
+     values()：返回所有value的Collection集合
+     entrySet()：返回所有的"映射"的Set集合，"映射"中包括了key和value。
+
+
+     Map的key不允许重复？如何判断重复？
+     （1）对象的hashcode的值一样。
+     （2）对象的equals返回true。
+
+    -- HashMap
+      基于哈希表的 Map 接口的实现。
+      允许使用 null 值和 null 键。
+      不同步。
+
+   -- Hashtable
+      和HashMap一样，区别在于是同步。
+
+    -- TreeMap
+
+    （1）该映射根据其键的自然顺序进行排序
+    （2）或者根据创建映射时提供的 Comparator 进行排序，具体取决于使用的构造方法。 
+
+
+    -- Properties
+    Properties 类表示了一个持久的属性集[key=value]
+    java语言最初的配置文件是.properties的文件。
+
+    Properties类更多的是存储或者读取属性。
+    Properties类更多的是存储或者读取属性文件。
+
+    Properties类不建议想父类Hashtable那样key和value是任意的对象。
+    建议Properties类只是操作String。
+    不建议使用父类的put方法，和get方法，而是使用自己的
+    setProperty(String key, String value) 
+    getProperty(String key) 
+
+
+
+使用List集合完成一个简单的通讯录功能。
+ /*
+ *通讯录: List
+ *1.创建一个Student对象，包括: id,name,sex,address,phone,Email
+ *2.创建一个接口,实现通讯录的添加,删除,查询（查询全部,根据姓名查询）;
+ *3.实现类实现老师提供的AddressBook接口;
+ *
+ */
+ 
+ /**
+*定义一个接口,对对象的操作:添加,删除,查询;
+*/
+public interface AddressBook {
+
+	/**
+	 * 添加一个学生到集合当中
+	 * @param stu 学生
+	 * @return 成功返回true 失败false
+	 * */
+	public boolean addStudent(Student stu);
+
+	/**
+	 * 从集合里面删除一个学生
+	 * @param stu 学生
+	 * @return 成功返回true 失败false
+	 * */
+	public boolean removeStudent(Student stu);
+
+	/**
+	 * 查询所有学生信息
+	 * @return 包含所有学生信息的集合
+	 * */
+	public List<Student> findAllStudent();
+
+	/**
+	 * 根据学生姓名查询学生信息(假设姓名不会重复)
+	 * @return 包含学生信息的Student对象
+	 * */
+	public Student findStudentByName(String name);
+
+}
+
+// 自己的通讯录
+public void AddressBookImpl implements AddressBook{
+
+	private List<Student> list;
+
+	public AddressBookImpl{
+		list = new ArrayList<Student>();
+	}
+	
+	public boolean addStudent(Student stu){
+		list.add(stu);
+	}
+}
+
+public void Test{
+	
+	public static void main(String[] args) {
+		AddressBook book = new AddressBookImpl();
+		Student s = new Student(属性);
+		book.addStudent(s);
+		System.out.println(book);
+	}
+}
+
+
+5. 使用Map集合完成一个简单的通讯录功能。
+/*
+ *通讯录: Map
+ *1.创建一个Student对象，包括: id,name,sex,address,phone,Email
+ *2.创建一个接口,实现通讯录的添加,删除,查询（查询全部,根据姓名查询）;
+ *3.实现类实现老师提供的AddressBook接口;
+ */
+public interface StudentManager {
+	/**
+	 * 添加一个学生到集合,key为学生的name
+	 * @param stu 学生
+	 * @return 成功返回true 失败false
+	 * */
+	public boolean addStudent(Student stu);
+	/**
+	 * 从集合里面删除一个学生,根据id去找到学生然后删除
+	 * @param id 学生id
+	 * @return 成功返回true 失败false
+	 * */
+	public boolean removeStudent(Integer name);
+	/**
+	 * 修改一个学生的所有信息,通过id找到学生,然后修改
+	 * @param Stu 学生对象（包括需要修改的信息）
+	 * */
+	public void modifyStudent(Student stu);
+	/**
+	 * 查询所有学生信息打印在控制台
+	 * */
+	public void viewAllStudent();
+	/**
+	 * 根据学生姓名查询学生信息(假设姓名不会重复)
+	 * @return 包含学生信息的Student对象
+	 * */
+	public Student findStudentByName(String name);
+}

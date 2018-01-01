@@ -1,0 +1,18 @@
+作者签名：  
+
+   点击 “windows” ---> "prefrences" 
+    --->"输入 “temp” " 找到 java下面 Code Temolates 
+    ---->点击 “Comments” --> "Types" 点击  “Edit”
+
+    输入 ：
+       /**
+	 * @Author xlei 
+	 * @Version 1.0
+	 * @Tel 13360026135
+	 * @Email 251425887@qq.com
+	 * @Date ${date}${time}
+	 * @From http://www.fkjava.org
+	 *  
+	 */
+
+    导出：新建类以后 ，在类上面 输入“ALT+SHIFT+J”可以自动导出作者签名
